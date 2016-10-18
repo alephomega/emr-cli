@@ -1,7 +1,11 @@
 source("spark_submit.R")
 
-run <- function(cluster, jar, interval = 30000L, timeslot, redis) {
-  args <- c("--interval", as.integer(interval), "--timeSlot", timeslot, "--redisHost", redis$host, "--redisPort", as.integer(redis$port))
+run <- function(cluster, jar, interval = 300000L, timeslot, redis) {
+  args <- c("--interval", as.integer(interval), 
+            "--timeSlot", timeslot, 
+            "--redisHost", redis$host, 
+            "--redisPort", as.integer(redis$port))
+  
   s <- spec(
     name = sprintf("Allocation Planning - %s", timeslot), 
     args = args, 
