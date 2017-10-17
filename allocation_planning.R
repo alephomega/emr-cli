@@ -40,12 +40,15 @@ timeslot <- function(sl) {
     tz = "UTC")
 }
 
-run <- function(cluster, jar, interval = TIMESLOT_LENGTH, timeslot, redis, service) {
+run <- function(cluster, jar, interval = TIMESLOT_LENGTH, timeslot, redis, service, propagation) {
   args <- c("--interval", as.integer(interval), 
             "--timeSlot", timeslot, 
-            "--redisHost", redis$host, 
-            "--redisPort", as.integer(redis$port),
-            "--service", service) 
+            "--redis.host", redis$host, 
+            "--redis.port", as.integer(redis$port),
+            "--service", service,
+			"--propagation.api", propagation$api,
+			"--propagation.key", propagation$key) 
+
   s <- spec(
     name = sprintf("Allocation Planning - %s", timeslot), 
     args = args, 
@@ -63,5 +66,6 @@ ts <- if (is.na(ts)) timeslot(TIMESLOT_LENGTH_IN_SECONDS) else ts
 run(cluster = arg("cluster"),
     jar = arg("jar"),
     timeslot = ts,
-    redis = list(host = arg("redisHost"), port = as.integer(arg("redisPort"))),
-	service = arg("service"))
+    redis = list(host = arg("redis.host"), port = as.integer(arg("redis.port"))),
+	service = arg("service"),
+	propagation = list(api = arg("propagation.api"), key = arg("propagation.key")))
