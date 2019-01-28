@@ -20,7 +20,7 @@ submit <- function(cluster, specs) {
   on.exit(if (file.exists(f)) unlink(f))
   
   cmd <- "aws"
-  args <- c("emr", "add-steps", "--profile", "allocation-planning", "--cluster-id", cluster, "--steps", sprintf("file://%s", f))
+  args <- c("--region", "ap-southeast-1", "emr", "add-steps", "--profile", "allocation-planning", "--cluster-id", cluster, "--steps", sprintf("file://%s", f))
   status <- system2(cmd, args) 
   if (status != 0) {
     stop(sprintf("Failed to add steps: %s %s", cmd, paste(args, collapse = " ")))
